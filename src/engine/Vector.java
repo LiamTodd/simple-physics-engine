@@ -1,15 +1,15 @@
 package engine;
 
 public class Vector {
-    private float x;
-    private float y;
+    private double x;
+    private double y;
 
-    public Vector(float x, float y) {
+    public Vector(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public float getX() {
+    public double getX() {
         return x;
     }
 
@@ -17,7 +17,7 @@ public class Vector {
         this.x = x;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
