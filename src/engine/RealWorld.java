@@ -16,6 +16,7 @@ public class RealWorld extends World {
         Vector position;
         Vector velocity;
         Vector acceleration;
+
         for (Entity entity : this.getEntities()) {
             position = entity.getPosition();
             velocity = entity.getVelocity();
@@ -26,28 +27,59 @@ public class RealWorld extends World {
             entity.setVelocity(VectorUtils.add(velocity, acceleration));
 //            update acceleration: todo
 
-            verticalBounce(entity);
-            horizontalBounce(entity);
+
+//            bouncing off world boundaries
+            handleBoundaryCollisions(entity);
+
+//            collisions
+            handleEntityCollisions(entity);
 
         }
 
     }
 
+    private void handleEntityCollisions(Entity entity) {
+//        todo
+    }
+
+    private void handleBoundaryCollisions(Entity entity) {
+        this.verticalBounce(entity);
+        this.horizontalBounce(entity);
+    }
+
     private void verticalBounce(Entity entity) {
-//                    check if entity hit the floor or ceiling
-        if (entity.getPosition().getY() <= 0 || entity.getPosition().getY() >= this.getHeight()) {
-//                reverse y-velocity
-//                todo: add in energy loss
-            entity.setVelocity(new Vector(entity.getVelocity().getX(), -entity.getVelocity().getY()));
+//        todo: energy loss
+        double x = entity.getPosition().getX();
+        double y = entity.getPosition().getY();
+        double vX = entity.getVelocity().getX();
+        double vY = entity.getVelocity().getY();
+//        entity hit floor
+        if (y < 0) {
+            entity.setPosition(new Vector(x, 0));
+            entity.setVelocity(new Vector(vX, -vY));
+        }
+//        entity hit ceiling
+        else if (y > this.getHeight()) {
+            entity.setPosition(new Vector(x, this.getHeight()));
+            entity.setVelocity(new Vector(vX, -vY));
         }
     }
 
     private void horizontalBounce(Entity entity) {
-//                    check if entity hit either side
-        if (entity.getPosition().getX() <= 0 || entity.getPosition().getX() >= this.getWidth()) {
-//                reverse x-velocity
-//                todo: add in energy loss
-            entity.setVelocity(new Vector(-entity.getVelocity().getX(), entity.getVelocity().getY()));
+//        todo: energy loss
+        double x = entity.getPosition().getX();
+        double y = entity.getPosition().getY();
+        double vX = entity.getVelocity().getX();
+        double vY = entity.getVelocity().getY();
+//        entity hit left wall
+        if (x < 0) {
+            entity.setPosition(new Vector(0, y));
+            entity.setVelocity(new Vector(-vX, vY));
+        }
+//        entity hit right wall
+        else if (x > this.getWidth()) {
+            entity.setPosition(new Vector(this.getWidth(), y));
+            entity.setVelocity(new Vector(-vX, vY));
         }
     }
 }
